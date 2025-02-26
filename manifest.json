@@ -1,0 +1,10 @@
+{
+  "id": "my-plugin",
+  "name": "My Plugin",
+  "version": "0.1.0",
+  "minAppVersion": "1.1.0",
+  "description": "This is my custom plugin for Obsidian.",
+  "author": "Your Name",
+  "authorUrl": "https://example.com",
+  "isDesktopOnly": false
+}
