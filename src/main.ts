@@ -44,6 +44,17 @@ export default class MyPlugin extends Plugin {
                 new (window as any).Notice('Hello from MyPlugin!');
             }
         });
+
+        // 注册文件切换事件监听器
+        this.registerEvent(
+            this.app.workspace.on('file-open', (file) => {
+                // 检查侧边栏是否可见
+                if (this.isSidebarVisible() && file) {
+                    // 获取并打印文件内容
+                    this.printFileContent(file);
+                }
+            })
+        );
     }
 
     async onunload() {
@@ -77,5 +88,42 @@ export default class MyPlugin extends Plugin {
 
     async saveSettings() {
         await this.saveData(this.settings);
+    }
+
+    /**
+     * 检查侧边栏是否可见
+     * @returns 侧边栏是否可见
+     */
+    private isSidebarVisible(): boolean {
+        const leaves = this.app.workspace.getLeavesOfType(VIEW_TYPE_SIDEBAR);
+        if (leaves.length === 0) {
+            return false;
+        }
+        
+        // 检查叶子是否在当前工作区中可见
+        for (const leaf of leaves) {
+            if (leaf.view && leaf.view.containerEl.isShown()) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
+    /**
+     * 获取并打印文件内容
+     * @param file 打开的文件
+     */
+    private async printFileContent(file: any) {
+        try {
+            if (file && file.path) {
+                // 获取文件内容
+                const content = await this.app.vault.read(file);
+                console.log(`文件 ${file.path} 的内容:`);
+                console.log(content);
+            }
+        } catch (error) {
+            console.error('读取文件内容时出错:', error);
+        }
     }
 }
