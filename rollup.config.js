@@ -22,11 +22,6 @@ export default {
     resolve({
       browser: true
     }),
-    commonjs(),
-    copy({
-      targets: [
-        { src: 'manifest.json', dest: '.' }
-      ]
-    })
+    commonjs()
   ]
 };
